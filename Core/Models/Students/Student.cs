@@ -1,20 +1,32 @@
-﻿namespace Core.Models;
+﻿using Core.Models.Students;
+
+namespace Core.Models;
 
 public class Student
 {
-    public Guid Id { get; } = Guid.CreateVersion7(); 
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    public Guid Id { get; } = Guid.CreateVersion7();
+    private string FirstName { get; init; } = string.Empty;
+    public string LastName { get; private init; } = string.Empty;
     public string? FullName => $"{FirstName} {LastName}";
-    public DateOnly? DoB { get; set; }
+    private DateOnly DoB { get; init; }
     public Address? Address { get; set; }
     public string? Phone { get; set; }
     public List<Subject> Subjects { get; set; } = [];
-
-    public Student(string firstName, string lastName)
+    public decimal Avg => this.CalculateGPA();
+    public int Age => DateTime.Now.Year - DoB.Year;
+    
+    private Student()
     {
-        FirstName = firstName;
-        LastName = lastName;
+    }
+    
+    public static Student Create(string firstName, string lastName, DateOnly dob)
+    {
+        return new Student
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            DoB = dob,
+        };
     }
     
     public override string ToString()

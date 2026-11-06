@@ -7,6 +7,8 @@ public class Group
     public required string Name { get; set; }
     public required Specific Specific { get; set; }
     public List<Student> Students { get; set; } = [];
+    
+    public Student? this[string lastName] => Students.FirstOrDefault(x => x.LastName == lastName);
 
     public Group()
     {
