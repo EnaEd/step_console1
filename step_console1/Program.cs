@@ -4,31 +4,35 @@ using Core.Models.Students;
 {
     try
     {
+        var subjectBase = new Subject("Math", 90, ExamResult.Pass);
         var student = Student
             .Create("John", "Doe", DateOnly.FromDateTime(DateTime.Now.AddYears(-20)))
             .WithSubjects(
-                new Subject("Math", 90, ExamResult.Pass),
-                new Subject("English", 45, ExamResult.Pass),
-                new Subject("History", 45, ExamResult.Pass));
-        
+                subjectBase,
+                subjectBase with { Title = "English", Mark = 45 },
+                subjectBase with { Title = "History", Mark = 45 });
+
         Console.WriteLine($"s1:{student}");
-        
+
         var student2 = Student
             .Create("Johan", "Doe", DateOnly.FromDateTime(DateTime.Now.AddYears(-20)))
             .WithPhone("123-456-7890")
             .WithSubjects(
-            new Subject("Math", 70, ExamResult.Pass),
-            new Subject("English", 45, ExamResult.Pass),
-            new Subject("History", 45, ExamResult.Pass));
+                subjectBase with { Mark = 70 },
+                subjectBase with { Title = "English", Mark = 50 },
+                subjectBase with { Title = "History", Mark = 35 });
         
         Console.WriteLine($"s2:{student2}");
 
-        Console.WriteLine(student.CalculateGPA());
-        Console.WriteLine(student.HasPassedSession());
-        Console.WriteLine(student == student2);
-        Console.WriteLine(student != student2);
-        Console.WriteLine(student > student2);
-        Console.WriteLine(student < student2);
+        Console.WriteLine(student.CalculateGPA());//60
+        Console.WriteLine(student.HasPassedSession());//true
+        Console.WriteLine(student2.CalculateGPA());//51.66
+        
+        Console.WriteLine(student == student2);//false 60-> 51.66
+        Console.WriteLine(student != student2);//true  60-> 51.66
+        
+        Console.WriteLine(student > student2);//true  60-> 51.66
+        Console.WriteLine(student < student2);//false  60-> 51.66
         
         var group = new Group
         {
